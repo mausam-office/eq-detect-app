@@ -1,0 +1,5 @@
+# streamlit==0.84.2
+streamlit-folium
+streamlit==1.10.0
+typing-extensions~=3.7.4
+numpy~=1.19.2
