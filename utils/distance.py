@@ -1,6 +1,3 @@
-import numpy as np
-
-from datetime import datetime
 from math import radians, sin, cos, sqrt, atan2
 
 def haversine(coord1, coord2):

@@ -1,5 +1,3 @@
-import os
-import time
 import streamlit as st
 
 from utils.base import base

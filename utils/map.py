@@ -1,4 +1,3 @@
-import os
 import folium
 
 from utils.constants import (
