@@ -2,14 +2,15 @@ import copy
 import pandas as pd
 import streamlit as st
 
-from scipy.optimize import minimize
+from datetime import datetime, timedelta
+from scipy.optimize import minimize, differential_evolution
 from streamlit_folium import folium_static
 
 from utils.base import base
 from utils.constants import WAVE_VELOCITY, LAT, LON, SOURCE_MARKER_PATH, SENSOR_MARKER_PATH, CONFIG_FP
 from utils.distance import haversine
 from utils.map import get_map, plot_location, plot_line
-from utils.objective import objective_function
+from utils.objective import objective_function, objective_function2
 from utils.time import calculate_duration
 
 base()
@@ -48,32 +49,33 @@ def plot():
     sensor_positions = list(zip(latitudes, longitudes))
 
     lat, lon = st.session_state['lat_lon'].split(',')[:2]
-    p1 = [float(lat), float(lon)]
+    epicenter = [float(lat), float(lon)]
     
     arrival_times = calculate_duration(
         sensor_positions, 
-        p1, 
+        epicenter, 
         st.session_state['wave_velocity']
     )
 
-    initial_guess = (27.659761, 85.547499) # random
-    result = minimize(
-        objective_function, 
-        initial_guess, 
-        args=(sensor_positions, arrival_times, st.session_state['wave_velocity'])
+    ref_timestamp = str(datetime.now())
+    # Convert timestamps to datetime objects
+    arrival_timestamp = [datetime.strptime(ref_timestamp, "%Y-%m-%d %H:%M:%S.%f") + timedelta(seconds=ts) for ts in arrival_times]
+
+    result = differential_evolution(
+        objective_function2,
+        bounds=[(26.2, 30.542104,), (79.983786, 88.274412)],  # Latitude and longitude bounds
+        args=(sensor_positions, arrival_timestamp, st.session_state['wave_velocity']),
     )
 
     estimated_location = result.x.tolist()
 
-    bias = haversine(p1, estimated_location)    # in meters
+    bias = haversine(epicenter, estimated_location)    # in meters
     
     map = plot_location(copy.deepcopy(st.session_state['map']), sensor_positions, SENSOR_MARKER_PATH, 'Sensor')
     map = plot_location(map, [estimated_location], SOURCE_MARKER_PATH, 'Epicenter')
-    map = plot_line(map, p1, estimated_location)
+    map = plot_line(map, epicenter, estimated_location)
 
     folium_static(map, height=850, width=1625)
-
-    print(bias, 'meters')
 
 
 def column_validation():
