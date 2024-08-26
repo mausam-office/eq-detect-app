@@ -64,7 +64,7 @@ def plot():
 
     result = differential_evolution(
         objective_function2,
-        bounds=[(26.2, 30.542104,), (79.983786, 88.274412)],  # Latitude and longitude bounds
+        bounds=[(25.0, 31.0), (78.0, 90.0)],  # Latitude and longitude bounds
         args=(sensor_positions, arrival_timestamp, st.session_state['wave_velocity']),
     )
 
