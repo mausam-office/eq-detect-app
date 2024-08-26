@@ -65,7 +65,7 @@ def plot():
     result = differential_evolution(
         objective_function2,
         bounds=[(26.2, 30.542104,), (79.983786, 88.274412)],  # Latitude and longitude bounds
-        args=(sensor_positions, arrival_timestamp, st.session_state['wave_velocity'] + random.randint(10, 50)),
+        args=(sensor_positions, arrival_timestamp, st.session_state['wave_velocity']),
     )
 
     estimated_location = result.x.tolist()
