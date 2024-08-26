@@ -13,7 +13,10 @@ def objective_function(source, sensor_positions, arrival_times, wave_speed):
     return np.sum(time_diffs**2)
 
 # Objective function to minimize
-def objective_function2(source_location, sensor_positions, arrival_times, wave_speed):
+def objective_function2(params, sensor_positions, arrival_times):
+    source_location = params[:2]  # First two parameters are the source location
+    wave_speed = params[2]        # Third parameter is the wave speed
+
     n = len(sensor_positions)
     errors = []
     

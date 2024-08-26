@@ -64,11 +64,15 @@ def plot():
 
     result = differential_evolution(
         objective_function2,
-        bounds=[(23.0, 32.0), (77.0, 91.0)],  # Latitude and longitude bounds
-        args=(sensor_positions, arrival_timestamp, st.session_state['wave_velocity']),
+        bounds=[(23.0, 32.0), (77.0, 91.0), (4800, 7200)],  # Latitude, longitude and speed bounds
+        args=(sensor_positions, arrival_timestamp),
     )
 
-    estimated_location = result.x.tolist()
+    # estimated_location = result.x.tolist()
+    estimated_location = result.x[:2]
+    estimated_wave_speed = result.x[2]
+
+    print(f"{estimated_wave_speed=}")
 
     bias = haversine(epicenter, estimated_location)    # in meters
     
