@@ -121,6 +121,20 @@ with st.sidebar as s_bar:
 
         column_validation()
 
+        if 'cluster_num' in st.session_state['df']:
+            clusters = st.session_state['df']['cluster_num'].unique()
+            min_val = int(min(clusters))
+            max_val = int(max(clusters))
+            selected_cluster = st.slider('Select Sensor Cluster:', min_val, max_val, min_val)
+
+            st.session_state['df'] = st.session_state['df'][st.session_state['df']['cluster_num'] == selected_cluster]
+
+            if len(st.session_state['df']):
+                num_sensors = st.slider("Numer of sensors to use in estimation: ", 1, len(st.session_state['df']), 1)
+                st.session_state['df'] = st.session_state['df'].sample(num_sensors)
+            else:
+                st.error('No data available for selected cluster.')
+
         disabled = False
     else:
         disabled = True
