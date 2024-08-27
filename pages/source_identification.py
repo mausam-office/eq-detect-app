@@ -68,11 +68,8 @@ def plot():
         args=(sensor_positions, arrival_timestamp),
     )
 
-    # estimated_location = result.x.tolist()
     estimated_location = result.x[:2]
     estimated_wave_speed = result.x[2]
-
-    print(f"{estimated_wave_speed=}")
 
     bias = haversine(epicenter, estimated_location)    # in meters
     
@@ -80,6 +77,7 @@ def plot():
     map = plot_location(map, [estimated_location], SOURCE_MARKER_PATH, ['Epicenter'])
     map = plot_line(map, epicenter, estimated_location)
 
+    st.success(f"Estimated Wave Speed: {estimated_wave_speed:.4f}m/s |  Estimated location is {bias/1000:.4f} km away")
     folium_static(map, height=850, width=1625)
 
 
