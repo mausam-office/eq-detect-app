@@ -16,10 +16,10 @@ def get_map(token):
     return map_tile
 
 
-def plot_location(map, loc, icon_path, label):
-    for lat, lon in loc:
+def plot_location(map, locs, icon_path, labels):
+    for loc, label in zip(locs, labels):
         folium.Marker(
-            location=(lat, lon),
+            location=loc,
             tooltip=label,
             icon=folium.CustomIcon(icon_path, icon_size=(20, 20)),
         ).add_to(map)

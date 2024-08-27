@@ -76,8 +76,8 @@ def plot():
 
     bias = haversine(epicenter, estimated_location)    # in meters
     
-    map = plot_location(copy.deepcopy(st.session_state['map']), sensor_positions, SENSOR_MARKER_PATH, 'Sensor')
-    map = plot_location(map, [estimated_location], SOURCE_MARKER_PATH, 'Epicenter')
+    map = plot_location(copy.deepcopy(st.session_state['map']), sensor_positions, SENSOR_MARKER_PATH, arrival_timestamp)
+    map = plot_location(map, [estimated_location], SOURCE_MARKER_PATH, ['Epicenter'])
     map = plot_line(map, epicenter, estimated_location)
 
     folium_static(map, height=850, width=1625)
